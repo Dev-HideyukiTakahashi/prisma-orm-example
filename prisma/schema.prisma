@@ -13,6 +13,15 @@ datasource db {
 // Declaradando Model
 model User{
   id    Int @id @default(autoincrement())
-  email String @unique
-  name  String? // '?' define se pode ou não ter esse atributo
+  firstName String?
+  lastName  String? // '?' define se pode ou não ter esse atributo
+  fleet Vehicle[]
+}
+
+model Vehicle{
+  id          Int @id @default(autoincrement())
+  description String
+  year        Int
+  userId      Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
