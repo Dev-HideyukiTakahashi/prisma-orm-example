@@ -1,4 +1,4 @@
-import { PrismaClient, User, Vehicle } from "@prisma/client"
+import { Prisma, PrismaClient, User, Vehicle } from "@prisma/client"
 
 const prisma = new PrismaClient();
 
@@ -92,6 +92,12 @@ class UserRepository {
   }
 }
 
+async function queryNativaGenerica() {
+  console.log(`----------Executando query nativa genérica----------`)
+  const rawUsers = await prisma.$queryRaw(Prisma.sql`select * from user`)
+  console.log(rawUsers);
+}
+
 async function main() {
   const user = await createUser({ firstName: "Timber", lastName: "Saw" });
   await createUser({ firstName: "Joao", lastName: "Silva" });
@@ -110,6 +116,8 @@ async function main() {
   const u = await repository.findByFirstNameAndLastName("Joao", "Silva");
   console.log("----------Repository----------")
   console.log(u);
+
+  await queryNativaGenerica();
 
   await removeVehicles();
   await removeUsers(usrs);
